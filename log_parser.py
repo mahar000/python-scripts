@@ -7,6 +7,18 @@ string1,string2,string3
 
 script will generate grep  as follows
 grep -E 'string1' RTC.csv|grep -E  'string2'|grep -E 'string3'
+Sample  grep string file
+
+cat mystrings_rtc.csv
+grep -E  'ERROR:|CRITITCAL:|WARNING:',|grep -v 'Unexpected answer received',
+grep -E  'established',
+grep -E 'changed: OPEN',
+grep -Ei  'Exception',
+grep -E  'WARNING: Gx Server Overload',
+grep -E OVERLOAD,
+grep -E "Broken pipe",
+grep -E  broken,
+
 
 '''
 
@@ -94,6 +106,13 @@ def get_results():
 # Running the functions
 File1 = "/blah/scripts/INPUT/input.txt"
 File2 = "/blah/scripts/INPUT/dir.txt"
+
+'''
+Above two files provide the names  of the files for which script will parse the logs
+File1 ( has log file names)
+File2 ( has dir path for the logfiles)
+
+'''
 
 with open(File1, 'r', encoding="utf-8") as t1:
     fileone = t1.readlines()
