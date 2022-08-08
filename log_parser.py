@@ -25,25 +25,52 @@ grep -E  broken,
 from datetime import datetime, timedelta
 import subprocess
 import csv
-import pytz
+
+
+from dateutil.parser import parse
+
+def is_date(string, fuzzy=False):
+    """
+    Return whether the string can be interpreted as a date.
+
+    :param string: str, string to check for date
+    :param fuzzy: bool, ignore unknown tokens in string if True
+    """
+    try:
+        parse(string, fuzzy=fuzzy)
+        return True
+
+    except ValueError:
+        return False
+
+
 
 def get_log():
     '''
     Function to get last 5 minutes log
     '''
-    now = datetime.now(pytz.timezone('US/Pacific'))
+    now = datetime.now()
     print(now)
     lookback = timedelta(minutes=5)
     print(lookback)
-    five_min_before = (now - lookback).strftime("%b %e %H:%M:%S")
-    # five_min_before = (now - lookback).strftime("%m/%d/%Y %H:%M:%S")
+    # five_min_before = (now - lookback).strftime("%b %e %H:%M:%S")
+    five_min_before = (now - lookback)
     print(five_min_before)
     with open(result_file, 'w') as file_object:
         with open(File, 'r') as f:
             for line in f:
-                if line[:14] > five_min_before:
-                    # print(line)
-                    file_object.write(line)
+                if is_date(line[:19]):
+                    #print(line)
+                    date_time_obj = datetime.strptime(line[:19],"%m/%d/%Y %H:%M:%S")
+                    #print(type(date_time_obj))
+                    #print(type(five_min_before))
+                    if date_time_obj > five_min_before:
+                        # print(line)
+                        file_object.write(line)
+
+
+
+
 
 
 def get_files():
@@ -106,13 +133,6 @@ def get_results():
 # Running the functions
 File1 = "/blah/scripts/INPUT/input.txt"
 File2 = "/blah/scripts/INPUT/dir.txt"
-
-'''
-Above two files provide the names  of the files for which script will parse the logs
-File1 ( has log file names)
-File2 ( has dir path for the logfiles)
-
-'''
 
 with open(File1, 'r', encoding="utf-8") as t1:
     fileone = t1.readlines()
