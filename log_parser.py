@@ -45,7 +45,7 @@ def get_log():
                     mytime = datetime.strptime(line[0:19], '%b %e %H:%M:%S')
                     if mytime < five_min_before:
                         continue
-                    else:
+                    elif mytime > five_min_before:
                         file_object.write(line.strip())
                 except ValueError:
                     continue
