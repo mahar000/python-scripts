@@ -27,24 +27,6 @@ import subprocess
 import csv
 
 
-from dateutil.parser import parse
-
-def is_date(string, fuzzy=False):
-    """
-    Return whether the string can be interpreted as a date.
-
-    :param string: str, string to check for date
-    :param fuzzy: bool, ignore unknown tokens in string if True
-    """
-    try:
-        parse(string, fuzzy=fuzzy)
-        return True
-
-    except ValueError:
-        return False
-
-
-
 def get_log():
     '''
     Function to get last 5 minutes log
@@ -53,24 +35,20 @@ def get_log():
     print(now)
     lookback = timedelta(minutes=5)
     print(lookback)
-    # five_min_before = (now - lookback).strftime("%b %e %H:%M:%S")
-    five_min_before = (now - lookback)
+    five_min_before = (now - lookback).strftime("%b %e %H:%M:%S")
+    # five_min_before = (now - lookback).strftime("%m/%d/%Y %H:%M:%S")
     print(five_min_before)
     with open(result_file, 'w') as file_object:
         with open(File, 'r') as f:
             for line in f:
-                if is_date(line[:19]):
-                    #print(line)
-                    date_time_obj = datetime.strptime(line[:19],"%m/%d/%Y %H:%M:%S")
-                    #print(type(date_time_obj))
-                    #print(type(five_min_before))
-                    if date_time_obj > five_min_before:
-                        # print(line)
-                        file_object.write(line)
-
-
-
-
+                try:
+                    mytime = datetime.strptime(line[0:19], '%b %e %H:%M:%S')
+                    if mytime < five_min_before:
+                        continue
+                    else:
+                        file_object.write(line.strip())
+                except ValueError:
+                    continue
 
 
 def get_files():
