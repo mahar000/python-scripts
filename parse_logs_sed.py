@@ -11,22 +11,23 @@ grep -E 'string1' RTC.csv|grep -E  'string2'|grep -E 'string3'
 '''
 
 from datetime import datetime, timedelta
+import os
 import subprocess
 import csv
 
 
 def get_log():
     '''
-    Function to get last 5 minutes log using sed 
+    Function to get last 5 minutes log using sed
     '''
-    from datetime import datetime, timedelta
+
     now = datetime.now()
-    now1 = datetime.now().strftime("%m\/%d\/%Y %H:%M:%S")
+    now1 = datetime.now().strftime("%m\/%d\/%Y %H:%M:%S")  # this need to be format in the actual log file
     lookback = timedelta(minutes=5)
-    five_min_before = (now - lookback).strftime("%m\/%d\/%Y %H:%M:%S")
+    five_min_before = (now - lookback).strftime("%m\/%d\/%Y %H:%M:%S") # this need to be format in the actual log file
     cmd = f'''sed -n "/{five_min_before}/,/{now1}/p"   {File}'''
     print(cmd)
-    #subprocess.run([cmd], shell=True, stdout=result_file)
+    # subprocess.run([cmd], shell=True, stdout=result_file)
     with open(result_file, 'w') as file_object:
         subprocess.run([cmd], shell=True, stdout=file_object)
 
@@ -65,7 +66,10 @@ def get_results():
                     str = f"{myarray[0]} {result_file} "
                     print(str)
                     cmd = str
-                    subprocess.run([cmd], shell=True, stdout=f1)
+                    if os.stat("result_file").st_size == 0:
+                        print(f"file {result_file} is empty")
+                    else:
+                        subprocess.run([cmd], shell=True, stdout=f1)
 
                 elif len(myarray) > 1:
                     i = 0
@@ -85,7 +89,10 @@ def get_results():
                             if i == len(myarray):
                                 print(str)
                                 cmd = str
-                                subprocess.run([cmd], shell=True, stdout=f1)
+                                if os.stat("result_file").st_size == 0:
+                                    print(f"file {result_file} is empty")
+                                else:
+                                    subprocess.run([cmd], shell=True, stdout=f1)
 
 
 # Running the functions
