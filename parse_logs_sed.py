@@ -30,9 +30,9 @@ def get_log():
     '''
 
     now = datetime.now()
-    now1 = datetime.now().strftime("%m\/%d\/%Y %H:%M:%S")  # this need to be format in the actual log file
+    now1 = datetime.now().strftime("%m\/%d\/%Y %H:%M:")  # this need to be format in the actual log file
     lookback = timedelta(minutes=5)
-    five_min_before = (now - lookback).strftime("%m\/%d\/%Y %H:%M:%S") # this need to be format in the actual log file
+    five_min_before = (now - lookback).strftime("%m\/%d\/%Y %H:%M:") # this need to be format in the actual log file
     cmd = f'''sed -n "/{five_min_before}/,/{now1}/p"   {File}'''
     print(cmd)
     # subprocess.run([cmd], shell=True, stdout=result_file)
@@ -74,7 +74,7 @@ def get_results():
                     str = f"{myarray[0]} {result_file} "
                     print(str)
                     cmd = str
-                    if os.stat("result_file").st_size == 0:
+                    if os.stat(result_file).st_size == 0:
                         print(f"file {result_file} is empty")
                     else:
                         subprocess.run([cmd], shell=True, stdout=f1)
@@ -97,7 +97,7 @@ def get_results():
                             if i == len(myarray):
                                 print(str)
                                 cmd = str
-                                if os.stat("result_file").st_size == 0:
+                                if os.stat(result_file).st_size == 0:
                                     print(f"file {result_file} is empty")
                                 else:
                                     subprocess.run([cmd], shell=True, stdout=f1)
