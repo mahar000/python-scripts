@@ -4,10 +4,18 @@ Script to parse smf log files , script is using config file in csv format,
 the config file is  mystrings.csv
 file format is
 string1,string2,string3
-
 script will generate grep  as follows
 grep -E 'string1' RTC.csv|grep -E  'string2'|grep -E 'string3'
-
+Sample  grep string file
+cat mystrings_rtc.csv
+grep -E  'ERROR:|CRITITCAL:|WARNING:',|grep -v 'Unexpected answer received',
+grep -E  'established',
+grep -E 'changed: OPEN',
+grep -Ei  'Exception',
+grep -E  'WARNING: Gx Server Overload',
+grep -E OVERLOAD,
+grep -E "Broken pipe",
+grep -E  broken,
 '''
 
 from datetime import datetime, timedelta
