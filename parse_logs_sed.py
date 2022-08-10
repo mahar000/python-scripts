@@ -33,7 +33,7 @@ def get_log():
     now1 = datetime.now().strftime("%m\/%d\/%Y %H:%M:")  # this need to be format in the actual log file
     lookback = timedelta(minutes=5)
     five_min_before = (now - lookback).strftime("%m\/%d\/%Y %H:%M:") # this need to be format in the actual log file
-    cmd = f'''sed -n "/{five_min_before}/,/{now1}/p"   {File}'''
+    cmd = f'''sed -n "/^{five_min_before}/,/^{now1}/p"   {File}'''
     print(cmd)
     # subprocess.run([cmd], shell=True, stdout=result_file)
     with open(result_file, 'w') as file_object:
