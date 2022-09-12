@@ -2,7 +2,7 @@
 '''
 Script to parse smf log files , script is using config file in csv format,
 the config file is  mystrings.csv
-file format is
+file format is (empty lines and commented lines will be ignored)
 string1,string2,string3
 script will generate grep  as follows
 grep -E 'string1' RTC.csv|grep -E  'string2'|grep -E 'string3'
@@ -26,13 +26,13 @@ import csv
 
 def get_log():
     '''
-    Function to get last 5 minutes log using sed
+    Function to get last 5 minutes log
     '''
 
     now = datetime.now()
-    now1 = datetime.now().strftime("%m\/%d\/%Y %H:%M:")  # this need to be format in the actual log file
+    now1 = datetime.now().strftime("%b %e %H:%M:")
     lookback = timedelta(minutes=5)
-    five_min_before = (now - lookback).strftime("%m\/%d\/%Y %H:%M:") # this need to be format in the actual log file
+    five_min_before = (now - lookback).strftime("%b %e %H:%M:")
     cmd = f'''sed -n "/^{five_min_before}/,/^{now1}/p"   {File}'''
     print(cmd)
     # subprocess.run([cmd], shell=True, stdout=result_file)
@@ -63,11 +63,14 @@ def get_results():
     '''
 
     with open(final_result, "a+") as f1:
-        with open(string_file, "r", encoding="utf-8") as  csv_file:
+        with open(string_file, "r", encoding="utf-8") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             for row in csv_reader:
+
                 myarray1 = row
-                myarray = list(filter(None, myarray1))
+                myarray0 = list(filter(None, myarray1))
+                myarray = [x for x in myarray0 if not x.startswith('#')]
+
                 # print(myarray)
 
                 if len(myarray) == 1:
@@ -104,8 +107,8 @@ def get_results():
 
 
 # Running the functions
-File1 = "/var/opt/SIU/scripts/INPUT/input.txt"
-File2 = "/var/opt/SIU/scripts/INPUT/dir.txt"
+File1 = "/blah/INPUT/input.txt"
+File2 = "/blah/INPUT/dir.txt"
 
 with open(File1, 'r', encoding="utf-8") as t1:
     fileone = t1.readlines()
