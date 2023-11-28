@@ -1,5 +1,5 @@
 import re
-pattern = r'(va2[a-z]+crm[0-9]+)'
+pattern = r'(bc[a-z]+abc[0-9]+)'
 p=re.compile(pattern)
 import pandas as pd
 import numpy as np
